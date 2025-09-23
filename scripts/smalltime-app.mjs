@@ -3,6 +3,16 @@ import { Helpers, ST_Config } from './helpers.mjs';
 Hooks.on('init', () => {
   Helpers.configureReleaseSpecificStuff();
 
+  // Add setting to enable Day Phases display for players
+  game.settings.register('smalltime', 'day-phase-display', {
+    name: 'Show Day Phases',
+    hint: 'Display day phase names instead of clock for non-GM players.',
+    scope: 'world',
+    config: true,
+    type: Boolean,
+    default: false,
+  });
+
   game.keybindings.register('smalltime', 'toggle-hotkey', {
     name: game.i18n.localize('SMLTME.Toggle_Hotkey'),
     hint: game.i18n.localize('SMLTME.Toggle_Hotkey_Hint'),
@@ -832,6 +842,7 @@ class SmallTimeApp extends FormApplication {
       timeValue: this.currentTime,
       hourString: SmallTimeApp.convertTimeIntegerToDisplay(this.currentTime).hours,
       minuteString: SmallTimeApp.convertTimeIntegerToDisplay(this.currentTime).minutes,
+  phaseString: !game.user.isGM && game.settings.get('smalltime', 'day-phase-display') ? ST_Config.getDayPhase(this.currentTime) : '',
       dateString: game.settings.get('smalltime', 'current-date'),
     };
   }
@@ -947,9 +958,27 @@ class SmallTimeApp extends FormApplication {
       'input',
       '#timeSlider',
       foundry.utils.debounce(async function () {
-        $('#hourString').html(SmallTimeApp.convertTimeIntegerToDisplay($(this).val()).hours);
-        $('#minuteString').html(SmallTimeApp.convertTimeIntegerToDisplay($(this).val()).minutes);
-        SmallTimeApp.timeTransition($(this).val());
+        const newVal = Number($(this).val());
+        // GMs should always see the clock; non-GMs follow the day-phase-display setting
+        if (game.user.isGM) {
+          $('#hourString').html(SmallTimeApp.convertTimeIntegerToDisplay(newVal).hours);
+          $('#minuteString').html(SmallTimeApp.convertTimeIntegerToDisplay(newVal).minutes);
+          $('#phaseString').hide();
+          $('#clockString').show();
+        } else {
+          if (game.settings.get('smalltime', 'day-phase-display')) {
+            const phase = ST_Config.getDayPhase(newVal);
+            $('#phaseString').html(phase);
+            $('#phaseString').show();
+            $('#clockString').hide();
+          } else {
+            $('#hourString').html(SmallTimeApp.convertTimeIntegerToDisplay(newVal).hours);
+            $('#minuteString').html(SmallTimeApp.convertTimeIntegerToDisplay(newVal).minutes);
+            $('#phaseString').hide();
+            $('#clockString').show();
+          }
+        }
+        SmallTimeApp.timeTransition(newVal);
         if (game.user.isGM) {
           SmallTimeApp.emitSocket('changeTime', $(this).val());
         }

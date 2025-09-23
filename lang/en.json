@@ -43,5 +43,14 @@
   "SMLTME.Moon_Darkness": "Moon Phase Affects Darkness",
   "SMLTME.Moon_Darkness_Hint": "Automatically adapt the maximum Darkness level based on the current phase of the moon.",
   "SMLTME.Toggle_Hotkey": "Visibility Toggle",
-  "SMLTME.Toggle_Hotkey_Hint": "Toggles the SmallTime window on or off."
+  "SMLTME.Toggle_Hotkey_Hint": "Toggles the SmallTime window on or off.",
+  "SMLTME.Phase.Phase1": "Night",
+  "SMLTME.Phase.Phase2": "Dawn",
+  "SMLTME.Phase.Phase3": "Sunrise",
+  "SMLTME.Phase.Phase4": "Morning",
+  "SMLTME.Phase.Phase5": "Midday",
+  "SMLTME.Phase.Phase6": "Afternoon",
+  "SMLTME.Phase.Phase7": "Vespers",
+  "SMLTME.Phase.Phase8": "Twilight",
+  "SMLTME.Phase.Phase9": "Evening"
 }

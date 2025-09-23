@@ -43,6 +43,15 @@
 	"SMLTME.Moon_Darkness": "Moon Phase Affects Darkness",
 	"SMLTME.Moon_Darkness_Hint": "Regola i livelli di Oscurità per adattarsi alla fase lunare corrente.",
 	"SMLTME.Toggle_Hotkey": "Visibilità del Widget",
-	"SMLTME.Toggle_Hotkey_Hint": "Mostra o nasconde la finestra di SmallTime."
+	"SMLTME.Toggle_Hotkey_Hint": "Mostra o nasconde la finestra di SmallTime.",
+	"SMLTME.Phase.Phase1": "Notte",
+	"SMLTME.Phase.Phase2": "Aurora",
+	"SMLTME.Phase.Phase3": "Alba",
+	"SMLTME.Phase.Phase4": "Mattino",
+	"SMLTME.Phase.Phase5": "Meriggio",
+	"SMLTME.Phase.Phase6": "Pomeriggio",
+	"SMLTME.Phase.Phase7": "Vespro",
+	"SMLTME.Phase.Phase8": "Crepuscolo",
+	"SMLTME.Phase.Phase9": "Sera"
   }
   

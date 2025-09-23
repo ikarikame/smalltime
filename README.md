@@ -1,5 +1,23 @@
 # SmallTime
 
+This is a fork of the popular module [smalltime](https://github.com/unsoluble/smalltime) for Foundry VTT by unsoluble. 
+
+### Day Phases (New)
+
+SmallTime can now optionally show human-friendly "day phases" to players instead of a numeric clock. This is configured in the module settings:
+
+- "Show Day Phases" (World setting): when enabled, non-GM players will see a localized day-phase label (for example "Morning", "Twilight") instead of the numeric time. GMs always see the numeric clock.
+
+The phase names are provided via i18n keys. The module looks up these keys at runtime; the keys are:
+
+- SMLTME.Phase.Phase1 through SMLTME.Phase.Phase9
+
+You can edit/translate these entries in the `lang/*.json` files. By default `en.json` contains English equivalents and `it.json` contains the Italian labels.
+
+If you'd like different English labels for the phases (or translations for another language), edit the matching `SMLTME.Phase.PhaseN` entries.
+
+---
+
 _A small module for displaying and controlling the current time of day._
 
 ## Quick Summary

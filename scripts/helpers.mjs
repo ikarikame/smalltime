@@ -2,6 +2,28 @@ export const ST_Config = {};
 
 ST_Config.MoonPhases = ['new', 'waxing-crescent', 'first-quarter', 'waxing-gibbous', 'full', 'waning-gibbous', 'last-quarter', 'waning-crescent'];
 
+// Day phase configuration (localizable)
+ST_Config.DayPhases = [
+  { key: 'SMLTME.Phase.Phase1', start: 0, end: 240 },
+  { key: 'SMLTME.Phase.Phase2', start: 240, end: 315 },
+  { key: 'SMLTME.Phase.Phase3', start: 315, end: 390 },
+  { key: 'SMLTME.Phase.Phase4', start: 390, end: 660 },
+  { key: 'SMLTME.Phase.Phase5', start: 660, end: 840 },
+  { key: 'SMLTME.Phase.Phase6', start: 840, end: 1020 },
+  { key: 'SMLTME.Phase.Phase7', start: 1020, end: 1140 },
+  { key: 'SMLTME.Phase.Phase8', start: 1140, end: 1200 },
+  { key: 'SMLTME.Phase.Phase9', start: 1200, end: 1440 },
+];
+
+// Helper to get localized day phase name from time (minutes since midnight)
+ST_Config.getDayPhase = function(time) {
+  for (const phase of ST_Config.DayPhases) {
+    if (time >= phase.start && time < phase.end) return game.i18n.localize(phase.key);
+  }
+  // Edge case: 00:00
+  return game.i18n.localize(ST_Config.DayPhases[0].key);
+};
+
 ST_Config.PhaseValues = {
   0: 0,
   1: 0.25,
@@ -450,8 +472,25 @@ export class Helpers {
   // Helper function for time-changing socket updates.
   static handleTimeChange(timeInteger) {
     SmallTimeApp.timeTransition(timeInteger);
-    $('#hourString').html(SmallTimeApp.convertTimeIntegerToDisplay(timeInteger).hours);
-    $('#minuteString').html(SmallTimeApp.convertTimeIntegerToDisplay(timeInteger).minutes);
+    // GMs should always see the clock; non-GMs see either clock or phases depending on setting
+    if (game.user.isGM) {
+      $('#hourString').html(SmallTimeApp.convertTimeIntegerToDisplay(timeInteger).hours);
+      $('#minuteString').html(SmallTimeApp.convertTimeIntegerToDisplay(timeInteger).minutes);
+      $('#phaseString').hide();
+      $('#clockString').show();
+    } else {
+      if (game.settings.get('smalltime', 'day-phase-display')) {
+        const phase = ST_Config.getDayPhase(timeInteger);
+        $('#phaseString').html(phase);
+        $('#phaseString').show();
+        $('#clockString').hide();
+      } else {
+        $('#hourString').html(SmallTimeApp.convertTimeIntegerToDisplay(timeInteger).hours);
+        $('#minuteString').html(SmallTimeApp.convertTimeIntegerToDisplay(timeInteger).minutes);
+        $('#phaseString').hide();
+        $('#clockString').show();
+      }
+    }
 
     // Calculate and show the current seconds if required.
     if (game.settings.get('smalltime', 'time-format') == 24 && game.settings.get('smalltime', 'show-seconds') == true) {
