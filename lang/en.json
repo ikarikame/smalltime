@@ -53,4 +53,21 @@
   "SMLTME.Phase.Phase7": "Vespers",
   "SMLTME.Phase.Phase8": "Twilight",
   "SMLTME.Phase.Phase9": "Evening"
+  ,"SMLTME.Phase_Config_Title": "Configure Day Phases"
+  ,"SMLTME.Phase_Config_Open": "Configure Phases"
+  ,"SMLTME.Phase_Config_Hint": "Add, remove, rename, and adjust start/end times for day phases."
+  ,"SMLTME.Phase_Add": "Add Phase"
+  ,"SMLTME.Phase.Name": "Phase Name"
+  ,"SMLTME.Phase.Start": "Start (minutes)"
+  ,"SMLTME.Phase.End": "End (minutes)"
+  ,"SMLTME.Save": "Save"
+  ,"SMLTME.Remove": "Remove"
+  ,"SMLTME.Phase_Config_Saved": "Day phases saved"
+  ,"SMLTME.Phase_Config_Error": "One or more phases contain invalid start/end values."
+  ,"SMLTME.Day_Phases": "Day Phases"
+  ,"SMLTME.Day_Phases_Hint": "A list of day phases used when displaying phase names."
+  ,"SMLTME.Phase_Config_Reset": "Day phases reset to defaults"
+  ,"SMLTME.Reset": "Reset Defaults"
+  ,"SMLTME.Must_Be_GM": "Only a GM can reset the phases to defaults"
+  ,"SMLTME.Phase_Config_Adjusted": "Phase times were adjusted to be contiguous and non-overlapping"
 }

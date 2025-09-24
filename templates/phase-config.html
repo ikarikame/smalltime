@@ -1,0 +1,17 @@
+<form class="flexcol">
+  <div class="phases-list">
+    {{#each phases}}
+    <div class="phase-row" data-id="{{id}}">
+      <input type="text" name="phase-name-{{id}}" class="phase-name" value="{{this.name}}" placeholder="{{newPhasePlaceholder}}" />
+      <input type="time" name="phase-start-{{id}}" class="phase-start" value="{{this.startTime}}" {{#if this.first}}disabled{{/if}} />
+      <input type="time" name="phase-end-{{id}}" class="phase-end" value="{{this.endTime}}" {{#if this.last}}disabled{{/if}} />
+      <button type="button" class="phase-remove" title="{{removeText}}" aria-label="{{removeText}}"><i class="fas fa-times"></i></button>
+    </div>
+    {{/each}}
+  </div>
+  <div class="form-group actions" style="display:flex;gap:8px;">
+    <button type="button" class="phase-add">{{addText}}</button>
+    <button type="button" class="phase-reset">{{resetText}}</button>
+    <button type="submit">{{saveText}}</button>
+  </div>
+</form>

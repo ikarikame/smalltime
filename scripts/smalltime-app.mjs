@@ -1,4 +1,5 @@
 import { Helpers, ST_Config } from './helpers.mjs';
+import { createPhaseConfigClass } from './phase-config.mjs';
 
 Hooks.on('init', () => {
   Helpers.configureReleaseSpecificStuff();
@@ -282,6 +283,40 @@ Hooks.on('init', () => {
       step: 0.1,
     },
     default: 0.4,
+  });
+
+  // World setting holding the day phases configuration. Stored as array of {key, start, end}.
+  game.settings.register('smalltime', 'day-phases', {
+    name: game.i18n.localize('SMLTME.Day_Phases') || 'Day Phases',
+    hint: game.i18n.localize('SMLTME.Day_Phases_Hint') || 'Configure named day phases with start/end minutes.',
+    scope: 'world',
+    config: false,
+    type: Array,
+    default: ST_Config.DefaultDayPhases,
+  });
+
+  // Re-render the SmallTime app when phases change so displayed names update.
+  game.settings.register('smalltime', 'day-phases-watch', {
+    scope: 'client',
+    config: false,
+    type: Boolean,
+    default: false,
+    onChange: () => {
+      const app = game.modules.get('smalltime').myApp;
+      if (app) app.render(false);
+    },
+  });
+
+  // Register a menu for configuring phases (GM only)
+  // Create the PhaseConfig class now (runtime) to prefer V2 Application API if available
+  const PhaseConfig = createPhaseConfigClass();
+  game.settings.registerMenu('smalltime', 'phase-config-menu', {
+    name: game.i18n.localize('SMLTME.Phase_Config_Title') || 'Configure Day Phases',
+    label: game.i18n.localize('SMLTME.Phase_Config_Open') || 'Configure Phases',
+    hint: game.i18n.localize('SMLTME.Phase_Config_Hint') || 'Add, remove, and rename day phases.',
+    icon: 'fas fa-sun',
+    type: PhaseConfig,
+    restricted: true,
   });
 
   game.settings.register('smalltime', 'allow-trusted', {
@@ -777,7 +812,10 @@ Hooks.on('simple-calendar-date-time-change', (data) => {
   Helpers.updateGradientStops();
 });
 
-class SmallTimeApp extends FormApplication {
+// Prefer the V2 FormApplication API when present
+const BaseFormApplication = foundry?.applications?.api?.FormApplicationV2 || FormApplication;
+
+class SmallTimeApp extends BaseFormApplication {
   static _isOpen = false;
 
   async _render(force = false, options = {}) {
@@ -961,8 +999,10 @@ class SmallTimeApp extends FormApplication {
         const newVal = Number($(this).val());
         // GMs should always see the clock; non-GMs follow the day-phase-display setting
         if (game.user.isGM) {
-          $('#hourString').html(SmallTimeApp.convertTimeIntegerToDisplay(newVal).hours);
-          $('#minuteString').html(SmallTimeApp.convertTimeIntegerToDisplay(newVal).minutes);
+          const _d = SmallTimeApp.convertTimeIntegerToDisplay(newVal);
+          $('#hourString').html(_d.hours);
+          $('#minuteString').html(_d.minutes);
+          $('#ampmString').html(_d.ampm || '');
           $('#phaseString').hide();
           $('#clockString').show();
         } else {
@@ -972,8 +1012,10 @@ class SmallTimeApp extends FormApplication {
             $('#phaseString').show();
             $('#clockString').hide();
           } else {
-            $('#hourString').html(SmallTimeApp.convertTimeIntegerToDisplay(newVal).hours);
-            $('#minuteString').html(SmallTimeApp.convertTimeIntegerToDisplay(newVal).minutes);
+            const _d = SmallTimeApp.convertTimeIntegerToDisplay(newVal);
+            $('#hourString').html(_d.hours);
+            $('#minuteString').html(_d.minutes);
+            $('#ampmString').html(_d.ampm || '');
             $('#phaseString').hide();
             $('#clockString').show();
           }
@@ -1224,6 +1266,7 @@ class SmallTimeApp extends FormApplication {
   static convertTimeIntegerToDisplay(timeInteger) {
     let theHours = Math.floor(timeInteger / 60);
     let theMinutes = Math.trunc(timeInteger - theHours * 60);
+    let ampm = '';
 
     if (theMinutes < 10) theMinutes = `0${theMinutes}`;
     if (theMinutes === 0) theMinutes = '00';
@@ -1231,21 +1274,21 @@ class SmallTimeApp extends FormApplication {
     if (game.settings.get('smalltime', 'time-format') === 12) {
       if (theHours >= 12) {
         if (theHours === 12) {
-          theMinutes = `${theMinutes} PM`;
+          ampm = 'PM';
         } else if (theHours === 24) {
           theHours = 12;
-          theMinutes = `${theMinutes} AM`;
+          ampm = 'AM';
         } else {
           theHours = theHours - 12;
-          theMinutes = `${theMinutes} PM`;
+          ampm = 'PM';
         }
       } else {
-        theMinutes = `${theMinutes} AM`;
+        ampm = 'AM';
       }
       if (theHours === 0) theHours = 12;
     }
 
-    const timeObj = { hours: theHours, minutes: theMinutes };
+    const timeObj = { hours: theHours, minutes: theMinutes, ampm };
 
     return timeObj;
   }

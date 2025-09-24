@@ -414,6 +414,43 @@
   width: 100%;
 }
 
+/* PhaseConfig dialog styles */
+.phases-list .phase-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 8px;
+}
+.phases-list .phase-row .phase-name {
+  flex: 1;
+  min-width: 140px;
+  background: transparent;
+  border: 0;
+}
+.phases-list .phase-row input[type=time] {
+  width: 110px;
+  background: transparent;
+  border: 0;
+}
+.phase-remove {
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  font-size: 14px;
+  line-height: 1;
+  border-radius: 4px;
+  background: rgba(255,255,255,0.06);
+  color: #efefe0;
+  border: 0;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.phase-remove:hover {
+  background: rgba(255,255,255,0.12);
+}
+
 /* Phase display should match clock styling */
 #smalltime-app #phaseString {
   font-size: 13px;
@@ -429,6 +466,12 @@
   position: relative;
   top: -1px;
   margin: 0 -2px 0 -2px;
+}
+
+#smalltime-app #ampmString {
+  margin-left: 6px;
+  font-size: 0.7em;
+  vertical-align: super;
 }
 
 #smalltime-app .blink {

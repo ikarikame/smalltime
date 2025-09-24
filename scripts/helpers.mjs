@@ -3,7 +3,10 @@ export const ST_Config = {};
 ST_Config.MoonPhases = ['new', 'waxing-crescent', 'first-quarter', 'waxing-gibbous', 'full', 'waning-gibbous', 'last-quarter', 'waning-crescent'];
 
 // Day phase configuration (localizable)
-ST_Config.DayPhases = [
+// Default day phase configuration (localizable). This can be overridden
+// by a world setting. Stored setting value is an array of objects with
+// { key, start, end }.
+ST_Config.DefaultDayPhases = [
   { key: 'SMLTME.Phase.Phase1', start: 0, end: 240 },
   { key: 'SMLTME.Phase.Phase2', start: 240, end: 315 },
   { key: 'SMLTME.Phase.Phase3', start: 315, end: 390 },
@@ -15,13 +18,34 @@ ST_Config.DayPhases = [
   { key: 'SMLTME.Phase.Phase9', start: 1200, end: 1440 },
 ];
 
+// Return the configured day phases from settings, falling back to defaults.
+ST_Config.getDayPhases = function() {
+  try {
+    const stored = game?.settings?.get('smalltime', 'day-phases');
+    if (Array.isArray(stored) && stored.length) return stored;
+  } catch (e) {
+    // settings may not be available during early initialization
+  }
+  // Build defaults with localized display names when requested.
+  return ST_Config.DefaultDayPhases.map((p) => ({ ...p, name: game?.i18n ? game.i18n.localize(p.key) : p.key }));
+};
+
 // Helper to get localized day phase name from time (minutes since midnight)
 ST_Config.getDayPhase = function(time) {
-  for (const phase of ST_Config.DayPhases) {
-    if (time >= phase.start && time < phase.end) return game.i18n.localize(phase.key);
+  const phases = ST_Config.getDayPhases();
+  for (const phase of phases) {
+    if (time >= phase.start && time < phase.end) {
+      // Prefer an explicit display name; fall back to localizing a key if present.
+      if (phase.name) return phase.name;
+      if (phase.key) return game.i18n.localize(phase.key);
+      return '';
+    }
   }
   // Edge case: 00:00
-  return game.i18n.localize(ST_Config.DayPhases[0].key);
+  const first = phases[0] || {};
+  if (first.name) return first.name;
+  if (first.key) return game.i18n.localize(first.key);
+  return '';
 };
 
 ST_Config.PhaseValues = {
@@ -474,8 +498,10 @@ export class Helpers {
     SmallTimeApp.timeTransition(timeInteger);
     // GMs should always see the clock; non-GMs see either clock or phases depending on setting
     if (game.user.isGM) {
-      $('#hourString').html(SmallTimeApp.convertTimeIntegerToDisplay(timeInteger).hours);
-      $('#minuteString').html(SmallTimeApp.convertTimeIntegerToDisplay(timeInteger).minutes);
+  const _d = SmallTimeApp.convertTimeIntegerToDisplay(timeInteger);
+  $('#hourString').html(_d.hours);
+  $('#minuteString').html(_d.minutes);
+  $('#ampmString').html(_d.ampm || '');
       $('#phaseString').hide();
       $('#clockString').show();
     } else {
@@ -485,8 +511,10 @@ export class Helpers {
         $('#phaseString').show();
         $('#clockString').hide();
       } else {
-        $('#hourString').html(SmallTimeApp.convertTimeIntegerToDisplay(timeInteger).hours);
-        $('#minuteString').html(SmallTimeApp.convertTimeIntegerToDisplay(timeInteger).minutes);
+  const _d = SmallTimeApp.convertTimeIntegerToDisplay(timeInteger);
+  $('#hourString').html(_d.hours);
+  $('#minuteString').html(_d.minutes);
+  $('#ampmString').html(_d.ampm || '');
         $('#phaseString').hide();
         $('#clockString').show();
       }
