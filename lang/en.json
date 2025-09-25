@@ -71,4 +71,5 @@
   ,"SMLTME.Reset": "Reset Defaults"
   ,"SMLTME.Must_Be_GM": "Only a GM can reset the phases to defaults"
   ,"SMLTME.Phase_Config_Adjusted": "Phase times were adjusted to be contiguous and non-overlapping"
+  ,"SMLTME.Phase_New_Placeholder": "New Phase"
 }
