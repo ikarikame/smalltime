@@ -29,7 +29,7 @@
     }
   ],
   "socket": true,
-  "esmodules": ["scripts/smalltime-app.mjs","phase-config.mjs"],
+  "esmodules": ["scripts/smalltime-app.mjs","scripts/phase-config.mjs"],
   "scripts": ["scripts/draggabilly.min.js"],
   "styles": ["styles/smalltime.css"],
   "languages": [
