@@ -2,19 +2,22 @@
 
 This is a fork of the popular module [smalltime](https://github.com/unsoluble/smalltime) for Foundry VTT by unsoluble. 
 
+
 ### Day Phases (New)
 
-SmallTime can now optionally show human-friendly "day phases" to players instead of a numeric clock. This is configured in the module settings:
+SmallTime can optionally show human-friendly "day phases" to players instead of a numeric clock. Enable this in the module settings:
 
-- "Show Day Phases" (World setting): when enabled, non-GM players will see a localized day-phase label (for example "Morning", "Twilight") instead of the numeric time. GMs always see the numeric clock.
+- "Show Day Phases" (World setting): when enabled, non-GM players will see a localized day-phase label (for example "Morning" or "Dusk") instead of the numeric time. GMs always see the numeric clock.
 
-The phase names are provided via i18n keys. The module looks up these keys at runtime; the keys are:
+Phases are fully configurable from the Phase Config screen (Settings → Configure Phases). Use that UI to add, remove, rename, and set start/end times for each phase. Phase start/end values are specified in minutes after midnight (0–1440). The module will validate and adjust phases so they are contiguous and non-overlapping when possible.
 
-- SMLTME.Phase.Phase1 through SMLTME.Phase.Phase9
+The default phase names are provided by i18n keys SMLTME.Phase.Phase1 through SMLTME.Phase.Phase10. English defaults (and the Phase Config defaults) live in `lang/en.json` — you can change these entries or add translations in any `lang/*.json` file to customize the labels shown to players.
 
-You can edit/translate these entries in the `lang/*.json` files. By default `en.json` contains English equivalents and `it.json` contains the Italian labels.
+Notes:
 
-If you'd like different English labels for the phases (or translations for another language), edit the matching `SMLTME.Phase.PhaseN` entries.
+- Phase times are saved to world settings so changes persist for your world.
+- The Phase Config screen includes "Save" and "Reset Defaults" actions; only a GM can reset phases to the defaults.
+- If "Show Day Phases" is enabled, non-GM players see the phase label; GMs always see the numeric time. Use the Player Visibility options in Scene Config to control what parts of SmallTime players can see.
 
 ---
 
