@@ -45,14 +45,15 @@
   "SMLTME.Toggle_Hotkey": "Visibility Toggle",
   "SMLTME.Toggle_Hotkey_Hint": "Toggles the SmallTime window on or off.",
   "SMLTME.Phase.Phase1": "Night",
-  "SMLTME.Phase.Phase2": "Dawn",
-  "SMLTME.Phase.Phase3": "Sunrise",
+  "SMLTME.Phase.Phase2": "First Light",
+  "SMLTME.Phase.Phase3": "Dawn",
   "SMLTME.Phase.Phase4": "Morning",
-  "SMLTME.Phase.Phase5": "Midday",
-  "SMLTME.Phase.Phase6": "Afternoon",
-  "SMLTME.Phase.Phase7": "Vespers",
-  "SMLTME.Phase.Phase8": "Twilight",
-  "SMLTME.Phase.Phase9": "Evening"
+  "SMLTME.Phase.Phase5": "Late Morning",
+  "SMLTME.Phase.Phase6": "Midday",
+  "SMLTME.Phase.Phase7": "Afternoon",
+  "SMLTME.Phase.Phase8": "Late Afternoon",
+  "SMLTME.Phase.Phase9": "Dusk",
+  "SMLTME.Phase.Phase10": "Evening"
   ,"SMLTME.Phase_Config_Title": "Configure Day Phases"
   ,"SMLTME.Phase_Config_Open": "Configure Phases"
   ,"SMLTME.Phase_Config_Hint": "Add, remove, rename, and adjust start/end times for day phases."

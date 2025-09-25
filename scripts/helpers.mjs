@@ -8,14 +8,15 @@ ST_Config.MoonPhases = ['new', 'waxing-crescent', 'first-quarter', 'waxing-gibbo
 // { key, start, end }.
 ST_Config.DefaultDayPhases = [
   { key: 'SMLTME.Phase.Phase1', start: 0, end: 240 },
-  { key: 'SMLTME.Phase.Phase2', start: 240, end: 315 },
-  { key: 'SMLTME.Phase.Phase3', start: 315, end: 390 },
-  { key: 'SMLTME.Phase.Phase4', start: 390, end: 660 },
-  { key: 'SMLTME.Phase.Phase5', start: 660, end: 840 },
-  { key: 'SMLTME.Phase.Phase6', start: 840, end: 1020 },
-  { key: 'SMLTME.Phase.Phase7', start: 1020, end: 1140 },
-  { key: 'SMLTME.Phase.Phase8', start: 1140, end: 1200 },
-  { key: 'SMLTME.Phase.Phase9', start: 1200, end: 1440 },
+  { key: 'SMLTME.Phase.Phase2', start: 240, end: 300 },
+  { key: 'SMLTME.Phase.Phase3', start: 300, end: 360 },
+  { key: 'SMLTME.Phase.Phase4', start: 360, end: 540 },
+  { key: 'SMLTME.Phase.Phase5', start: 540, end: 720 },
+  { key: 'SMLTME.Phase.Phase6', start: 720, end: 840 },
+  { key: 'SMLTME.Phase.Phase7', start: 840, end: 1020 },
+  { key: 'SMLTME.Phase.Phase8', start: 1020, end: 1140 },
+  { key: 'SMLTME.Phase.Phase9', start: 1140, end: 1260 },
+  { key: 'SMLTME.Phase.Phase10', start: 1260, end: 1440 },
 ];
 
 // Return the configured day phases from settings, falling back to defaults.

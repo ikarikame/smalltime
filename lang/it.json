@@ -46,12 +46,13 @@
 	"SMLTME.Toggle_Hotkey_Hint": "Mostra o nasconde la finestra di SmallTime.",
 	"SMLTME.Phase.Phase1": "Notte",
 	"SMLTME.Phase.Phase2": "Aurora",
-	"SMLTME.Phase.Phase3": "Alba",
-	"SMLTME.Phase.Phase4": "Mattino",
+	"SMLTME.Phase.Phase3": "Mattino",
+	"SMLTME.Phase.Phase4": "Tarda Mattina",
 	"SMLTME.Phase.Phase5": "Meriggio",
 	"SMLTME.Phase.Phase6": "Pomeriggio",
-	"SMLTME.Phase.Phase7": "Vespro",
-	"SMLTME.Phase.Phase8": "Crepuscolo",
-	"SMLTME.Phase.Phase9": "Sera"
+	"SMLTME.Phase.Phase7": "Tardo Pomeriggio",
+	"SMLTME.Phase.Phase8": "Tramonto",
+	"SMLTME.Phase.Phase9": "Sera",
+	"SMLTME.Phase.Phase10": "Notte"
   }
   
