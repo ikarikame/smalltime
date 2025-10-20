@@ -285,6 +285,16 @@ Hooks.on('init', () => {
     default: 0.4,
   });
 
+  // Option: Send a GM-only chat message when the day phase changes
+  game.settings.register('smalltime', 'phase-chat-gm', {
+    name: 'Send Day Phase Chat (GM-only)',
+    hint: 'When enabled, the GM will receive a private chat message containing the current date and the new day phase whenever the day phase changes.',
+    scope: 'world',
+    config: true,
+    type: Boolean,
+    default: false,
+  });
+
   // World setting holding the day phases configuration. Stored as array of {key, start, end}.
   game.settings.register('smalltime', 'day-phases', {
     name: game.i18n.localize('SMLTME.Day_Phases') || 'Day Phases',

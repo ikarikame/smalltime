@@ -49,6 +49,9 @@ ST_Config.getDayPhase = function(time) {
   return '';
 };
 
+// Keep track of the last announced phase so we can detect changes.
+ST_Config._lastAnnouncedPhase = null;
+
 ST_Config.PhaseValues = {
   0: 0,
   1: 0.25,
@@ -541,6 +544,39 @@ export class Helpers {
     $('#timeSlider').val(timeInteger);
     Helpers.handleRealtimeState();
     SmallTimeApp.updateDate();
+
+    // --- Phase change announcement (GM-only) ---
+    try {
+      // Only proceed if the world setting to announce phase changes to GM is enabled
+      if (game.settings.get('smalltime', 'phase-chat-gm')) {
+        const currentPhase = ST_Config.getDayPhase(timeInteger);
+        // Only announce if the phase string actually changed.
+        if (ST_Config._lastAnnouncedPhase !== currentPhase) {
+          ST_Config._lastAnnouncedPhase = currentPhase;
+
+          // Build the date/phase message. Prefer stored current-date setting if present.
+          const dateString = game.settings.get('smalltime', 'current-date') || '';
+          const messageContent = `${dateString}${dateString ? ' - ' : ''}${currentPhase}`;
+
+          // Determine GM user IDs to whisper to.
+          const gmIds = game.users
+            .filter((u) => u?.isGM)
+            .map((u) => u.id);
+
+          // Create the chat message as a whisper to GMs only.
+          ChatMessage.create({
+            user: game.user.id,
+            speaker: { alias: game.user.name },
+            content: messageContent,
+            whisper: gmIds,
+          });
+        }
+      }
+    } catch (e) {
+      // Don't let errors in announcement logic break time updates.
+      // eslint-disable-next-line no-console
+      console.warn('SmallTime: failed to announce phase change', e);
+    }
   }
 
   static getDate(provider, variant) {
