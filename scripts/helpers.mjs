@@ -552,24 +552,47 @@ export class Helpers {
         const currentPhase = ST_Config.getDayPhase(timeInteger);
         // Only announce if the phase string actually changed.
         if (ST_Config._lastAnnouncedPhase !== currentPhase) {
-          ST_Config._lastAnnouncedPhase = currentPhase;
+          // Determine a single GM client to send the announcement from. Use the first GM found.
+          const primaryGM = game.users.find((u) => u?.isGM);
+          // Only the primary GM client creates the chat message to avoid duplicates from multiple clients.
+          if (primaryGM && game.user.id === primaryGM.id) {
+            ST_Config._lastAnnouncedPhase = currentPhase;
 
-          // Build the date/phase message. Prefer stored current-date setting if present.
-          const dateString = game.settings.get('smalltime', 'current-date') || '';
-          const messageContent = `${dateString}${dateString ? ' - ' : ''}${currentPhase}`;
+            // Build the date/phase message. Prefer Simple Calendar's formatted display when available,
+            // otherwise fall back to the stored current-date setting.
+            let dateString = '';
+            try {
+              if (game.modules.get('foundryvtt-simple-calendar')?.active && typeof SimpleCalendar !== 'undefined') {
+                const scDate = SimpleCalendar.api.timestampToDate(game.time.worldTime);
+                const d = scDate.display || {};
+                // Compose a long localized date string similar to SmallTime's other displays.
+                dateString = (d.weekday ? d.weekday + ', ' : '') + (d.monthName ? d.monthName + ' ' : '') + (d.day ? d.day + (d.daySuffix || '') : '') + (d.year ? ', ' + d.year : '');
+              } else {
+                dateString = game.settings.get('smalltime', 'current-date') || '';
+              }
+            } catch (e) {
+              // If Simple Calendar call fails for any reason, fall back to stored date.
+              dateString = game.settings.get('smalltime', 'current-date') || '';
+            }
 
-          // Determine GM user IDs to whisper to.
-          const gmIds = game.users
-            .filter((u) => u?.isGM)
-            .map((u) => u.id);
+            const messageContent = `${dateString}${dateString ? ' - ' : ''}${currentPhase}`;
 
-          // Create the chat message as a whisper to GMs only.
-          ChatMessage.create({
-            user: game.user.id,
-            speaker: { alias: game.user.name },
-            content: messageContent,
-            whisper: gmIds,
-          });
+            // Determine GM user IDs to whisper to.
+            const gmIds = game.users
+              .filter((u) => u?.isGM)
+              .map((u) => u.id);
+
+            // Create the chat message as a whisper to GMs only.
+            ChatMessage.create({
+              user: game.user.id,
+              speaker: { alias: game.user.name },
+              content: messageContent,
+              whisper: gmIds,
+            });
+          } else {
+            // If not the primary GM, update local last-announced phase so other clients don't try to announce later.
+            ST_Config._lastAnnouncedPhase = currentPhase;
+          }
         }
       }
     } catch (e) {
