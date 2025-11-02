@@ -346,6 +346,31 @@ Hooks.on('init', () => {
     // Default is full moon.
     default: 4,
   });
+
+  // Internal world setting that stores the last announced phase so we don't
+  // re-announce on GM login/refresh. This is populated on ready by a GM if empty.
+  game.settings.register('smalltime', 'phase-last-announced', {
+    scope: 'world',
+    config: false,
+    type: String,
+    default: '',
+  });
+});
+
+// Ensure the persisted last-announced phase is initialized (GM only) so we don't
+// announce the current phase on login/refresh. A GM client will populate it
+// with the current phase if it's empty.
+Hooks.on('ready', () => {
+  try {
+    if (!game.user?.isGM) return;
+    const existing = game.settings.get('smalltime', 'phase-last-announced');
+    if (!existing) {
+      const cur = ST_Config.getDayPhase(Helpers.getWorldTimeAsDayTime());
+      game.settings.set('smalltime', 'phase-last-announced', cur);
+    }
+  } catch (e) {
+    // ignore
+  }
 });
 
 Hooks.on('setup', () => {
